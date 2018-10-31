@@ -12,6 +12,7 @@ class ComponentRegistry(abc.ABCMeta):
 
     component_registry = set()
 
+    # pylint: disable=arguments-differ
     def __new__(mcs, name, bases, attributes):
         component = abc.ABCMeta.__new__(mcs, name, bases, attributes)
         if name == 'Component':
