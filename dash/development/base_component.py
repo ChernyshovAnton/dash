@@ -3,16 +3,17 @@ import copy
 import os
 import inspect
 import keyword
+import abc
 import six
 
 
-class ComponentRegistry(type):
+class ComponentRegistry(abc.ABCMeta):
     """Just importing a component lib will make it be loaded on the index"""
 
     component_registry = set()
 
     def __new__(mcs, name, bases, attributes):
-        component = type.__new__(mcs, name, bases, attributes)
+        component = abc.ABCMeta.__new__(mcs, name, bases, attributes)
         if name == 'Component':
             # Don't do the base component
             return component
@@ -72,7 +73,7 @@ def _explicitize_args(func):
 
 
 @six.add_metaclass(ComponentRegistry)
-class Component:
+class Component(collections.MutableMapping):
     class _UNDEFINED(object):
         def __repr__(self):
             return 'undefined'
